@@ -3,12 +3,13 @@ import inspect
 import functools
 import itertools
 from dataclasses import *
-from typing import (
+from . import _shared
+from .typing import (
     Any, Callable, Mapping,
     TypeVar, ParamSpec,
     overload, dataclass_transform as dataclass_transform
 )
-from . import _shared
+
 
 
 _T = TypeVar("_T")
