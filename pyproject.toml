@@ -1,0 +1,35 @@
+[project]
+name = "stdlib-extensions"
+version = "0.1.0"
+description = ""
+authors = [{name="Anthony Doupe",email="atlamillias@outlook.com"}]
+urls = {}
+readme = "README.md"
+keywords = []
+classifiers = [
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+    "Operating System :: Microsoft :: Windows :: Windows 11",
+    "Operating System :: MacOS",
+    "Operating System :: POSIX",
+    "Operating System :: Unix",
+    "License :: OSI Approved :: MIT License",
+]
+requires-python = ">=3.10"
+dependencies = [
+    'typing-extensions >= 4.12'
+]
+
+
+[tool.pyright]
+exclude = [
+    ".scripts",
+	".files",
+	".venv"
+]
+reportWildcardImportFromLibrary = false
+
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
