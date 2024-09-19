@@ -3,7 +3,7 @@ name = "stdlib-extensions"
 version = "0.1.0"
 description = ""
 authors = [{name="Anthony Doupe",email="atlamillias@outlook.com"}]
-urls = {}
+urls = {source='https://github.com/Atlamillias/stdlib-extensions'}
 readme = "README.md"
 keywords = []
 classifiers = [
