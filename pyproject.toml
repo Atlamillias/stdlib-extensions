@@ -5,6 +5,7 @@ description = ""
 authors = [{name="Anthony Doupe",email="atlamillias@outlook.com"}]
 urls = {source='https://github.com/Atlamillias/stdlib-extensions'}
 readme = "README.md"
+license = { file = "LICENSE" }
 keywords = []
 classifiers = [
     "Programming Language :: Python :: 3 :: Only",
