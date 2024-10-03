@@ -1,5 +1,5 @@
-from typing_extensions import *
 from typing import *
+from typing_extensions import *
 import os
 import array
 import types
