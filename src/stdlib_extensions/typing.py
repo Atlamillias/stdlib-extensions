@@ -10,7 +10,11 @@ import threading
 
 
 
+# [ Internal ]
+
 _MISSING = object()
+
+_AnyStr = TypeVar('_AnyStr', bytes, str)
 
 
 
@@ -33,15 +37,11 @@ VT_contra = TypeVar("VT_contra", contravariant=True)
 P = ParamSpec("P")
 CallableT = TypeVar('CallableT', bound=Callable)
 
-# XXX: I THINK `AnyStr` is marked for deprecation?
 try:
     AnyStr  # type: ignore
+    AnyStr_co = TypeVar('AnyStr_co', bytes, str, covariant=True)
 except NameError:
-    AnyStr = TypeVar('AnyStr', bytes, str)
-AnyStr_co = TypeVar('AnyStr_co', bytes, str, covariant=True)
-
-
-
+    pass
 
 
 
@@ -164,9 +164,6 @@ SizedArray.register(array.array)  # type: ignore
 SizedArray.register(tuple)        # type: ignore
 
 SizedArrayT = TypeVar('SizedArrayT', bound=SizedArray)
-
-
-
 
 
 
@@ -418,17 +415,13 @@ class Property(Generic[T_co], cast(type[property], object), metaclass=_PropertyT
 
 
 
-
-
-
-
 # [ Aliases ]
 
 Mappable = TypeAliasType("Mappable", Mapping[KT, VT] | Iterable[tuple[KT, VT]], type_params=(KT, VT))
 Array = array.ArrayType
 StrPath = str | pathlib.Path
 PathLike = os.PathLike
-FileLike = TypeAliasType("FileLike", PathLike[AnyStr_co] | IO[AnyStr_co] | str, type_params=(AnyStr_co,))
+FileLike = TypeAliasType("FileLike", PathLike[_AnyStr] | IO[_AnyStr] | str, type_params=(_AnyStr,))
 MappingProxy = types.MappingProxyType
 Function = types.FunctionType
 Method = types.MethodType
@@ -453,10 +446,6 @@ _NpDataType = TypeVar("_NpDataType", bound=_np_generic)
 Vector = TypeAliasType('Vector', '_np_ndarray[tuple[int], _np_dtype[_NpDataType]] | SizedArray[_NpDataType]', type_params=(_NpDataType,))
 Matrix = TypeAliasType('Matrix', '_np_ndarray[tuple[int, int], _np_dtype[_NpDataType]] | SizedArray[Vector[_NpDataType]]', type_params=(_NpDataType,))
 Tensor = TypeAliasType('Tensor', '_np_ndarray[tuple[int, int, int], _np_dtype[_NpDataType]] | SizedArray[Matrix[_NpDataType]]', type_params=(_NpDataType,))
-
-
-
-
 
 
 
