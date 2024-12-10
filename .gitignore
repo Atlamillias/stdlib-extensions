@@ -1,6 +1,6 @@
 # [Project .gitignore]
 debug.py
-
+uv.lock
 
 
 # [OTHER .gitignore]
@@ -257,3 +257,4 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
