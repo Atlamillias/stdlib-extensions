@@ -542,8 +542,8 @@ def cast_signature(source: Any, target: Any = None, *, method_source: Any = Fals
         that its first argument should be a bound object i.e. `self`).
         Defaults to `False`.
 
-    :type method_target: `bool (optional, keyword-only)
-    :param dst_callable: When `True`, informs the type checker that the
+    :type method_target: `bool` (optional, keyword-only)
+    :param method_target: When `True`, informs the type checker that the
         signature of *target* is that of an unbound method (specifies
         that its first argument should be a bound object i.e. `self`).
         Defaults to `False`.
@@ -554,7 +554,7 @@ def cast_signature(source: Any, target: Any = None, *, method_source: Any = Fals
         callable. Mutually exclusive with *restype_only*. Defaults to
         `False`.
 
-    :type restype_only: `Any` (optional, keyword-only)
+    :type restype_only: `bool` (optional, keyword-only)
     :param restype_only: If `True`, the source's argument signature
         will not override the argument signature of the target
         callable. Mutually exclusive with *args_only*. Defaults to
