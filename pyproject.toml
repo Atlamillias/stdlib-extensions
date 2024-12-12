@@ -20,7 +20,7 @@ requires-python = ">=3.10"
 dependencies = [
     'typing-extensions >= 4.12'
 ]
-
+optional-dependencies = {other=['numpy']}
 
 [tool.pyright]
 exclude = [".venv"]
