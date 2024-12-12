@@ -1,6 +1,6 @@
 [project]
 name = "stdlib-extensions"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = [{name="Anthony Doupe",email="atlamillias@outlook.com"}]
 urls = {source='https://github.com/Atlamillias/stdlib-extensions'}

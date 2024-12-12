@@ -465,3 +465,104 @@ def cast_to(tp: Any, value: Any = _MISSING) -> Any:
     if value is _MISSING:
         return lambda value: value
     return value
+
+
+_ResObject = TypeVar('_ResObject')
+_ResParams = ParamSpec('_ResParams')
+_ResReturn = TypeVar('_ResReturn')
+_MethodFunc = TypeAliasType('_MethodFunc', Callable[Concatenate[T, P], _ResReturn], type_params=(T, P, _ResReturn))
+
+@overload
+def cast_signature(source: _MethodFunc[Any, _ResParams, _ResReturn], target: _MethodFunc[_ResObject, P, Any], *, method_source: Literal[True], method_target: Literal[True]) -> _MethodFunc[_ResObject, _ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, _ResParams, Any], target: _MethodFunc[_ResObject, P, _ResReturn], *, method_source: Literal[True], method_target: Literal[True], args_only: Literal[True]) -> _MethodFunc[_ResObject, _ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, P, _ResReturn], target: _MethodFunc[_ResObject, _ResParams, Any], *, method_source: Literal[True], method_target: Literal[True], restype_only: Literal[True]) -> _MethodFunc[_ResObject, _ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, _ResParams, _ResReturn], target: Callable[P, Any], *, method_source: Literal[True], method_target: Literal[False] = False) -> Callable[_ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, _ResParams, Any], target: Callable[P, _ResReturn], *, method_source: Literal[True], method_target: Literal[False] = False, args_only: Literal[True]) -> Callable[_ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, P, _ResReturn], target: Callable[_ResParams, Any], *, method_source: Literal[True], method_target: Literal[False] = False, restype_only: Literal[True]) -> Callable[_ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: Callable[_ResParams, _ResReturn], target: _MethodFunc[_ResObject, P, Any], *, method_source: Literal[False] = False, method_target: Literal[True]) -> _MethodFunc[_ResObject, _ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: Callable[_ResParams, Any], target: _MethodFunc[_ResObject, P, _ResReturn], *, method_source: Literal[False] = False, method_target: Literal[True], args_only: Literal[True]) -> _MethodFunc[_ResObject, _ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: Callable[P, _ResReturn], target: _MethodFunc[_ResObject, _ResParams, Any], *, method_source: Literal[False] = False, method_target: Literal[True], restype_only: Literal[True]) -> _MethodFunc[_ResObject, _ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: Callable[_ResParams, _ResReturn], target: Callable[P, Any], *, method_source: Literal[False] = False, method_target: Literal[False] = False) -> Callable[_ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: Callable[_ResParams, Any], target: Callable[P, _ResReturn], *, method_source: Literal[False] = False, method_target: Literal[False] = False, args_only: Literal[True]) -> Callable[_ResParams, _ResReturn]: ...
+@overload
+def cast_signature(source: Callable[P, _ResReturn], target: Callable[_ResParams, Any], *, method_source: Literal[False] = False, method_target: Literal[False] = False, restype_only: Literal[True]) -> Callable[_ResParams, _ResReturn]: ...
+# decorators
+@overload
+def cast_signature(source: _MethodFunc[Any, _ResParams, _ResReturn], *, method_source: Literal[True], method_target: Literal[True]) -> Callable[[_MethodFunc[_ResObject, P, Any]], _MethodFunc[_ResObject, _ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, _ResParams, Any], *, method_source: Literal[True], method_target: Literal[True], args_only: Literal[True]) -> Callable[[_MethodFunc[_ResObject, P, _ResReturn]], _MethodFunc[_ResObject, _ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, P, _ResReturn], *, method_source: Literal[True], method_target: Literal[True], restype_only: Literal[True]) -> Callable[[_MethodFunc[_ResObject, _ResParams, Any]], _MethodFunc[_ResObject, _ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, _ResParams, _ResReturn], *, method_source: Literal[True], method_target: Literal[False] = False) -> Callable[[Callable[P, Any]], Callable[_ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, _ResParams, Any], *, method_source: Literal[True], method_target: Literal[False] = False, args_only: Literal[True]) -> Callable[[Callable[P, _ResReturn]], Callable[_ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: _MethodFunc[Any, P, _ResReturn], *, method_source: Literal[True], method_target: Literal[False] = False, restype_only: Literal[True]) -> Callable[[Callable[_ResParams, Any]], Callable[_ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: Callable[_ResParams, _ResReturn], *, method_source: Literal[False] = False, method_target: Literal[True]) -> Callable[[_MethodFunc[_ResObject, P, Any]], _MethodFunc[_ResObject, _ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: Callable[_ResParams, Any], *, method_source: Literal[False] = False, method_target: Literal[True], args_only: Literal[True]) -> Callable[[_MethodFunc[_ResObject, P, _ResReturn]], _MethodFunc[_ResObject, _ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: Callable[P, _ResReturn], *, method_source: Literal[False] = False, method_target: Literal[True], restype_only: Literal[True]) -> Callable[[_MethodFunc[_ResObject, _ResParams, Any]], _MethodFunc[_ResObject, _ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: Callable[_ResParams, _ResReturn], *, method_source: Literal[False] = False, method_target: Literal[False] = False) -> Callable[[Callable[P, Any]], Callable[_ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: Callable[_ResParams, Any], *, method_source: Literal[False] = False, method_target: Literal[False] = False, args_only: Literal[True]) -> Callable[[Callable[P, _ResReturn]], Callable[_ResParams, _ResReturn]]: ...
+@overload
+def cast_signature(source: Callable[P, _ResReturn], *, method_source: Literal[False] = False, method_target: Literal[False] = False, restype_only: Literal[True]) -> Callable[[Callable[_ResParams, Any]], Callable[_ResParams, _ResReturn]]: ...
+def cast_signature(source: Any, target: Any = None, *, method_source: Any = False, method_target: Any = False, args_only: Any = False, restype_only: Any = False) -> Any:
+    """Cast a target callable's signature to that of another callable.
+    Can be used as a function or method decorator.
+
+    :type source: `Callable`
+    :param source: Function or method to source the signature from.
+
+    :type target: `Callable`
+    :param target: Function or method to cast. Can only be omitted
+        when `cast_signature` is used as a decorator — *target* is
+        expected to be the decorated function or method.
+
+    :type method_source: `bool` (optional, keyword-only)
+    :param method_source: When `True`, informs the type checker that the
+        signature of *source* is that of an unbound method (specifies
+        that its first argument should be a bound object i.e. `self`).
+        Defaults to `False`.
+
+    :type method_target: `bool (optional, keyword-only)
+    :param dst_callable: When `True`, informs the type checker that the
+        signature of *target* is that of an unbound method (specifies
+        that its first argument should be a bound object i.e. `self`).
+        Defaults to `False`.
+
+    :type args_only: `bool` (optional, keyword-only)
+    :param args_only: If `True`, the source's return type signature
+        will not override the return type signature of the target
+        callable. Mutually exclusive with *restype_only*. Defaults to
+        `False`.
+
+    :type restype_only: `Any` (optional, keyword-only)
+    :param restype_only: If `True`, the source's argument signature
+        will not override the argument signature of the target
+        callable. Mutually exclusive with *args_only*. Defaults to
+        `False`.
+
+    :rtype: `Callable`
+    :return: *target*, unchanged.
+    """
+    if target is not None:
+        return target
+
+    return lambda target: target
+
+
