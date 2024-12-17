@@ -185,8 +185,6 @@ class ChainMap(MutableMapping):
 
 
 
-
-
 # [Composition ABCs]
 
 # Personal experience; when I make a new type emulating a built-in, most
@@ -418,7 +416,6 @@ class ComposedList(IndexItemDel[T], IndexItemSet[T], IndexItemGet[T], Protocol[T
 
 
 
-
 # [ Mappings ]
 
 class IdentifierDict(ComposedDict[str, Any]):
@@ -525,6 +522,7 @@ class NamespaceDict(ComposedDict[str, Any], cast(type[types.SimpleNamespace], ob
 
     def __getattr__(self, name: str):
         # Forwards to `_object_value_` since it can point to a
-        # delegate of `__dict__` (like a chain map) — `__dict__`
-        # WILL always point to a Python `dict` object.
+        # delegate or wrapper of `__dict__` (like a chain map),
+        # while `__dict__` WILL always point to a Python `dict`
+        # object.
         return self._object_value_[name]
