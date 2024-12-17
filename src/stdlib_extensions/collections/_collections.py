@@ -439,6 +439,13 @@ class IdentifierDict(ComposedDict[str, Any]):
 
         return k
 
+    def __contains__(self, key: Any, /) -> bool:
+        try:
+            key = self._format_key(key)
+        except:
+            return False
+        return key in self._object_value_
+
 
 class NamespaceDict(ComposedDict[str, Any], cast(type[types.SimpleNamespace], object)):
     """A mutable mapping wrapper for creating namespaces. Similar
