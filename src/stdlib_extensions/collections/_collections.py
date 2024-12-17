@@ -36,6 +36,95 @@ if TYPE_CHECKING:
 
 
 
+# [ Functions ]
+
+def _flatten_mapping(namespace: str | None, src: Mapping[str, Any], dst: dict[str, Any], delimiter: str) -> None:
+    for k, v in src.items():
+        try:
+            k = delimiter.join((namespace, k))  # type: ignore
+        except TypeError:
+            if namespace:
+                raise
+
+        if ismapping(v):
+            _flatten_mapping(k, v, dst, delimiter)
+        else:
+            dst[k] = v
+
+def flatten_mapping(src: Mapping[str, Any], /, delimiter: str = '.') -> dict[str, Any]:
+    """Return a flattened variant of a structured mapping. Values of inner
+    mappings are mapped to a delimited string of keys used to originally
+    access the value from *src*.
+
+    This is the reverse operation of `structure_mapping`.
+
+    The maximum parsing depth of this function is tied to Python's
+    recursion limit (1000 by default).
+
+    >>> nested_dict = {
+    ...   'fruit': {'orange': 5, 'apple': 3},
+    ...   'color': {'red': 0, 'green': 180, 'blue': 255},
+    ... }
+    >>> flatten_mapping(nested_dict)
+    {'fruit.orange': 5, 'fruit.apple': 3, 'color.red': 0, 'color.green': 180, 'color.blue': 255}
+
+
+    :type src: `Mapping[str, Any]` (positional-only)
+    :param src: Mapping whose data the resulting dictionary will contain.
+        All keys in this mapping and its children must be strings.
+
+    :type delimiter: `str` (optional)
+    :param delimiter: One or more characters used as the key delimiter.
+        Defaults to `'.'`.
+
+    :rtype: `dict[str, Any]`
+    :return: Flattened version of *src*
+    """
+    dst = {}
+    _flatten_mapping(None, src, dst, delimiter)
+    return dst
+
+
+def structure_mapping(src: Mapping[str, Any], /, delimiter: str = '.') -> dict[str, Any]:
+    """Return a structured, nested variant of a flattened mapping. Keys are
+    split at *delimiter* and are recursively mapped to new inner dictionaries.
+    The value each delimited string of keys is mapped to the last key split
+    from the key.
+
+    This is the reverse operation of `flatten_mapping`.
+
+    The maximum depth of the dictionary returned by this function is tied
+    to Python's recursion limit (1000 by default).
+
+    >>> flat_dict = {'fruit.orange': 5, 'fruit.apple': 3, 'color.red': 0, 'color.green': 180, 'color.blue': 255}
+    >>> structure_mapping(flat_dict)
+    {'fruit': {'orange': 5, 'apple': 3}, 'color': {'red': 0, 'green': 180, 'blue': 255}}
+
+    :type src: `Mapping[str, Any]` (positional-only)
+    :param src: Mapping whose data the resulting dictionary will contain.
+        All keys must be strings.
+
+    :type delimiter: `str` (optional)
+    :param delimiter: One or more characters used as the key delimiter.
+        Defaults to `'.'`.
+
+    :rtype: `dict[str, Any]`
+    :return: Nested version of *src*
+    """
+    d = {}
+    for k, v in src.items():
+        keys = k.split(delimiter)
+        if len(keys) == 1:
+            d[k] = v
+            continue
+
+        inner = d
+        for k in keys[:-1]:
+            if k not in inner:
+                inner[k] = {}
+            inner = inner[k]
+        inner[keys[-1]] = v
+    return d
 
 
 
